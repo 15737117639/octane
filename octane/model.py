@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+from functools import wraps
 
 RANDOM_RANGE = -1.0, 1.0
 DEFAULT_LEARNING_RATE = 0.1
@@ -76,26 +77,33 @@ class Model:
     def __exit__(self, *args):
         self._session.close()
 
+    # TODO: do smth more clear and not ugly
+    def with_session(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            model_instance, *_ = args
+            assert isinstance(model_instance, Model) is True
+            try:
+                model_instance._session
+            except AttributeError:
+                raise RuntimeError('No session')
+            return func(*args, **kwargs)
+        return wrapper
+
+    @with_session
     def feed_through(self, data):
         """ feed through the model
         one dimensional data tensor @data """
-        # TODO: DRY
-        try:
-            sess = self._session
-        except AttributeError:
-            raise RuntimeError('No session')
+        sess = self._session
         return sess.run(
             self.output_layer,
             feed_dict={self._x: np.array([data])}
         )
 
+    @with_session
     def train(self, data_set):
         """ trains model with @data_set"""
-        # TODO: DRY
-        try:
-            sess = self._session
-        except AttributeError:
-            raise RuntimeError('No session')
+        sess = self._session
         for epoch in range(self._epochs):
             for ex, ey in zip(*data_set):
                 sess.run(

@@ -25,6 +25,14 @@ class TestModel(unittest.TestCase):
             self.assertAlmostEqual(*prediction[0], 97, delta=5)
         self.assertEqual(True, True)
 
+    def test_model_decorator(self):
+        model = Model([2, 1], 0.001, 2000)
+        try:
+            model.feed_through([1., 1.])
+            self.assertTrue(False)
+        except RuntimeError:
+            self.assertTrue(True)
+
 
 if __name__ == '__main__':
     unittest.main()
