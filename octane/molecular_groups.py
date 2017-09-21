@@ -60,3 +60,9 @@ def split_molecule_to_substructures(smiles_molecule):
     molecule = readstring('smi', smiles_molecule)
     return {group_key: molecular_groups[group_key].contains_in(molecule)
             for group_key in molecular_groups}
+
+def generate_fingerprint(molecule, format='fp2'):
+    """ """
+
+    molecule = readstring('smi', molecule)
+    return list(molecule.calcfp(format).bits)
