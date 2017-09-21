@@ -5,25 +5,24 @@ from octane.model import Model
 # dummy test
 class TestModel(unittest.TestCase):
     def test_model(self):
-        model = Model([5, 10, 1], 0.001, 2000)
+        model = Model([2, 5, 1], 0.01, 500)
         with model:
             model.train((
                 [
-                    [2., 1., 0., 0., 0.],
-                    [2., 0., 0., 0., 0.],
-                    [2., 2., 0., 0., 0.],
-                    [4., 0., 0., 1., 0.],
+                    [1., 1.],
+                    [1., 0.],
+                    [0., 1.],
+                    [0., 0.],
                 ],
                 [
-                    [96.],
-                    [99.],
-                    [89.1],
-                    [80.2],
+                    [4.],
+                    [3.],
+                    [3.],
+                    [2.],
                 ]
             ))
-            prediction = model.feed_through([2., 0., 0., 0., 0.])
-            self.assertAlmostEqual(*prediction[0], 97, delta=5)
-        self.assertEqual(True, True)
+            prediction = model.feed_through([5., 3.])
+            self.assertAlmostEqual(prediction[0][0], 10, delta=1)
 
     def test_model_decorator(self):
         model = Model([2, 1], 0.001, 2000)

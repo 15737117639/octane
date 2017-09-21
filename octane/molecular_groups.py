@@ -1,4 +1,5 @@
 from pybel import *
+from collections import OrderedDict
 
 
 class MolecularGroup:
@@ -21,7 +22,10 @@ class MolecularGroup:
         """ checks if the molecular group contains in some molecule
             and returns the number of that groups """
 
-        return len(self._smart_object.findall(molecule))
+        positions = self._smart_object.findall(molecule)
+        s = sum([sum(p) for p in positions])
+        s = 0
+        return s * len(positions)
 
     def __contains__(self, molecule):
         return bool(self.contains_in(molecule))
@@ -43,8 +47,11 @@ _molecular_groups = {
     '#C': {'pattern': 'C#[CH0]', 'ron': -7.20, 'mon': -12.96},
 }
 
-molecular_groups = {key: MolecularGroup(**_molecular_groups[key])
-                    for key in _molecular_groups}
+molecular_groups = OrderedDict(
+    {key: MolecularGroup(**_molecular_groups[key]) for key in _molecular_groups}
+)
+
+molecular_groups_count = len(molecular_groups)
 
 
 def split_molecule_to_substructures(smiles_molecule):

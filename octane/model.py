@@ -1,8 +1,9 @@
 import numpy as np
 import tensorflow as tf
 from functools import wraps
+import sys
 
-RANDOM_RANGE = -1.0, 1.0
+RANDOM_RANGE = -5.0, 5.0
 DEFAULT_LEARNING_RATE = 0.1
 DEFAULT_EPOCHS_NUMBER = 1000
 
@@ -65,7 +66,7 @@ class Model:
             tf.square(self.output_layer - self._y)
         )
 
-        optimizer = tf.train.GradientDescentOptimizer(
+        optimizer = tf.train.AdamOptimizer(
             tf.Variable(self._learning_rate)
         )
         self._train = optimizer.minimize(self.cost)
@@ -114,7 +115,7 @@ class Model:
                     }
                 )
                 # TODO: if debug
-                if epoch % 10 == 0 and False:
+                if epoch % 133 == 0:
                     print(
                         sess.run(
                             self.cost,
@@ -122,5 +123,6 @@ class Model:
                                 self._x: np.array([ex]),
                                 self._y: np.array([ey])
                             }
-                        )
+                        ),
+                        file=sys.stderr
                     )
