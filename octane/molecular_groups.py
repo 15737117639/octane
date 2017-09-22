@@ -23,9 +23,7 @@ class MolecularGroup:
             and returns the number of that groups """
 
         positions = self._smart_object.findall(molecule)
-        s = sum([sum(p) for p in positions])
-        s = 0
-        return s * len(positions)
+        return len(positions)
 
     def __contains__(self, molecule):
         return bool(self.contains_in(molecule))
@@ -51,18 +49,33 @@ molecular_groups = OrderedDict(
     {key: MolecularGroup(**_molecular_groups[key]) for key in _molecular_groups}
 )
 
-molecular_groups_count = len(molecular_groups)
 
-
-def split_molecule_to_substructures(smiles_molecule):
+def split_molecule_to_substructures(molecule, mol_fmt='smi'):
     """ """
 
-    molecule = readstring('smi', smiles_molecule)
+    molecule = readstring(mol_fmt, smiles_molecule)
     return {group_key: molecular_groups[group_key].contains_in(molecule)
             for group_key in molecular_groups}
 
-def generate_fingerprint(molecule, format='fp2'):
+# deprecated, isn't used now
+def generate_fingerprint(molecule, mol_fmt='smi', fp_fmt='fp2'):
     """ """
 
-    molecule = readstring('smi', molecule)
-    return list(molecule.calcfp(format).bits)
+    raise Exception('Deprecated for now')
+    molecule = readstring(mol_fmt, molecule)
+    return list(molecule.calcfp(fp_fmt).bits)
+
+def get_fingerprint_bitarray(molecule, size, mol_fmt='smi', fp_fmt='fp2'):
+    """ return a bit array list like representation for 
+    (note: it's python list representation of bit array
+    to simplify further operations) """
+
+    # generate bit array full of zeros
+    bit_array = [0 for _ in range(size)]
+    # parse molecule
+    molecule = readstring(mol_fmt, molecule)
+    # for each bit set up to 1
+    for bit_index in molecule.calcfp(fp_fmt).bits:
+        bit_array[bit_index] = 1
+
+    return bit_array
