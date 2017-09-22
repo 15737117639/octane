@@ -4,9 +4,12 @@
 
 X axis - experimental octane numbers, Y axis - our model:
 r<sup>2</sup> = 0.9267
-<img src=https://raw.githubusercontent.com/Blyschak/octane/master/data/graphs/experiment-vs-model.png></img>
-
+<img src=https://raw.githubusercontent.com/Blyschak/octane/master/data/graphs/experiment-vs-model.png>
 As you can see there is correlation between our model and experimental data set.
+</img>
+
+<img src=https://github.com/Blyschak/octane/blob/master/data/graphs/r_expreiment_vs_g_prediction.png> 
+X axis - number of molecule, Y axis - octane number; Green - model, Red - experiment. (just for test set for now)</img>
 <h1>Model</h1>
 The NN impementation module provides a class Model which you can use to easily create your NN-based model
 
